@@ -13,7 +13,7 @@ compile () {
 }
 
 package () {
-    APP_NAME="${project}" docker build ./bin
+    APP_NAME="${project}" docker build -f scripts/Dockerfile .
 }
 
 build () {
