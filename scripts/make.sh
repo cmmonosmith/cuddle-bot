@@ -9,6 +9,7 @@ clean () {
 
 compile () {
     go build -o bin/${project} $( [ "${VERBOSE}" = "1" ] && echo "-x -v" )
+    # TODO: move this to Dockerfile COPY when it's using a specific user
     chmod +x bin/${project}
 }
 
@@ -37,10 +38,10 @@ project="${PWD##*/}"
 for arg in "$@"
 do
     case "$arg" in
-        "--verbose")
+        "-v" | "--verbose")
             VERBOSE=1
             ;;
-        "--debug")
+        "-d" | "--debug")
             export DISCORD_BOT_LOG_DEBUG=1
             ;;
         *)

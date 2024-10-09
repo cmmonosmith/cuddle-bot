@@ -2,6 +2,7 @@ package bot
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"strings"
 
@@ -50,13 +51,21 @@ func (b *bot) newMessage(session *discordgo.Session, message *discordgo.MessageC
 	}
 	slog.Debug("newMessage", slog.Any("message", message.Content))
 
-	// respond to user message if it contains `!help` or `!bye`
+	// respond to user message if it starts with an @me
+	parts := strings.Split(message.Content, " ")
+	if parts[0] != fmt.Sprintf("<@%s>", b.id) {
+		return
+	}
+	if len(parts) == 1 {
+		session.ChannelMessageSend(message.ChannelID, "you have to tell me what you want :weary:")
+		return
+	}
+	parts = parts[1:]
 	switch {
-	case strings.Contains(message.Content, "!help"):
-		session.ChannelMessageSend(message.ChannelID, "Hello World😃")
-	case strings.Contains(message.Content, "!bye"):
-		session.ChannelMessageSend(message.ChannelID, "Good Bye👋")
-		// add more cases if required
+	case parts[0] == "hi":
+		session.ChannelMessageSend(message.ChannelID, "sup sup :sunglasses:")
+	default:
+		session.ChannelMessageSend(message.ChannelID, "sorry, i don't follow :sweat_smile:")
 	}
 }
 
