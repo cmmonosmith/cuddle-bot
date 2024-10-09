@@ -61,7 +61,7 @@ func (b *bot) newMessage(session *discordgo.Session, message *discordgo.MessageC
 }
 
 func (b *bot) interactionCreate(session *discordgo.Session, interaction *discordgo.InteractionCreate) {
-	slog.Debug("interaction created", slog.Any("interaction", interaction))
+	slog.Debug("created", slog.Any("interaction", interaction))
 
 	// ignore interactions that aren't application commands for now
 	if interaction.Type != discordgo.InteractionApplicationCommand {
@@ -79,7 +79,7 @@ func (b *bot) interactionCreate(session *discordgo.Session, interaction *discord
 		slog.Error("no user available in interaction")
 		return
 	}
-	slog.Debug("interaction user", slog.Any("user", userID))
+	slog.Debug("interaction", slog.Any("user", userID))
 	if b.id == userID {
 		slog.Error("somehow got command from self")
 		return
@@ -91,7 +91,7 @@ func (b *bot) interactionCreate(session *discordgo.Session, interaction *discord
 	if err != nil {
 		slog.Error("failed to marshal interaction application command data", slog.Any("error", err))
 	}
-	slog.Debug("interaction application command data: " + string(json))
+	slog.Debug("interaction application command data=" + string(json))
 
 	// respond to the command
 	err = session.InteractionRespond(interaction.Interaction, &discordgo.InteractionResponse{
